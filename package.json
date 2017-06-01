@@ -4,6 +4,6 @@
         "babel-preset-es2015": "^6.24.1"
     },
     "scripts": {
-        "watch": "babel --watch --out-dir dist/ src/*.js"
+        "watch": "babel --watch --out-file dist/cube.js src/cube.js"
     }
 }
