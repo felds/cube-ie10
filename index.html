@@ -8,12 +8,53 @@
     <title>Cube Viewer 2</title>
 
     <style media="screen">
-
+    body {
+        margin: 300px;
+        background: gray;
+    }
+    [data-cube] {
+        background: black;
+        width: 400px;
+        height: 400px;
+        background: orange;
+        position: relative;
+        perspective: 500px;
+    }
+    [data-face] {
+        position: absolute;
+        left: 0; top: 0;
+        width: 100%;
+        height: 100%;
+    }
+    [data-face=top] {
+        background: #BA4A00;
+        transform: translateY(-50%) rotateX(-90deg);
+    }
+    [data-face=left] {
+        background: #1E8449;
+        transform: translateX(-50%) rotateY(+90deg);
+    }
+    [data-face=right] {
+        background: #21618C;
+        transform: translateX(+50%) rotateY(-90deg);
+    }
+    [data-face=bottom] {
+        background: #909497;
+        transform: translateY(+50%) rotateX(+90deg);
+    }
+    [data-face=front] {
+        background: #F1C40F;
+        transform: rotateY(+90deg) translateX(+50%) rotateY(-90deg);
+    }
+    [data-face=back] {
+        background: #A569BD;
+        transform: rotateY(+90deg) translateX(-50%) rotateY(+90deg);
+    }
     </style>
 </head>
 <body>
 
-    <div id="cube">
+    <div data-cube id="cube">
         <div data-face="top" data-image="images/top.jpg"></div>
         <div data-face="left" data-image="images/left.jpg"></div>
         <div data-face="front" data-image="images/left.jpg"></div>
