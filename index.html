@@ -10,13 +10,13 @@
     <style media="screen">
     body {
         background: gray;
+        margin: 0;
     }
     .viewport {
         overflow: hidden;
         width: 800px;
         height: 800px;
         margin: 0 auto;
-        perspective: 600px;
     }
 
     [data-cube] {
@@ -34,25 +34,7 @@
         height: 100%;
         background-size: 800px 800px !important;
         background-position: center center;
-    }
-
-    [data-face=top] {
-        background: #BA4A00;
-    }
-    [data-face=left] {
-        background: #1E8449;
-    }
-    [data-face=right] {
-        background: #21618C;
-    }
-    [data-face=bottom] {
-        background: #909497;
-    }
-    [data-face=front] {
-        background: #F1C40F;
-    }
-    [data-face=back] {
-        background: #A569BD;
+        /*transition: transform 50ms ease-out;*/
     }
     </style>
 </head>
@@ -60,12 +42,12 @@
     <div class="viewport">
 
         <div data-cube id="cube">
-            <div data-face="top" style="background-image: url();"></div>
+            <div data-face="top" style="background-image: url(images/00_CUBEFACE_ECOSPORT_TOP.jpg);"></div>
             <div data-face="left" style="background-image: url(images/00_CUBEFACE_ECOSPORT_ESQUERDA.jpg);"></div>
             <div data-face="front" style="background-image: url(images/00_CUBEFACE_ECOSPORT_FRENTE.jpg);"></div>
             <div data-face="right" style="background-image: url(images/00_CUBEFACE_ECOSPORT_DIREITA.jpg);"></div>
             <div data-face="back" style="background-image: url(images/00_CUBEFACE_ECOSPORT_TRAS.jpg);"></div>
-            <div data-face="bottom" style="background-image: url();"></div>
+            <div data-face="bottom" style="background-image: url(images/00_CUBEFACE_ECOSPORT_BAIXO.jpg);"></div>
 
             <div data-feature="Direção elétrica" data-rot-y="-0" data-rot-x="0"></div>
             <div data-feature="Sync" data-rot-y="0" data-rot-x="2"></div>
