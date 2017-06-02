@@ -59,11 +59,16 @@ var transforms = {
     });
     window.addEventListener('mouseup', function (e) {
         stopDrag();
+    });
+    rootElement.addEventListener('touchstart', function (e) {
+        startDrag(e.touches[0].pageX, e.touches[0].pageY);
+    });
+    rootElement.addEventListener('touchmove', function (e) {
+        drag(e.touches[0].pageX, e.touches[0].pageY);
+    });
+    rootElement.addEventListener('touchend', function (e) {
+        stopDrag();
     }
-    // rootElement.addEventListener('mousedown', e => {})
-    // rootElement.addEventListener('mousedown', e => {})
-    // rootElement.addEventListener('mousedown', e => {})
-
 
     /*
         Animate

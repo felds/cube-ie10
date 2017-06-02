@@ -63,9 +63,15 @@ const transforms = {
     window.addEventListener('mouseup', e => {
         stopDrag()
     })
-    // rootElement.addEventListener('mousedown', e => {})
-    // rootElement.addEventListener('mousedown', e => {})
-    // rootElement.addEventListener('mousedown', e => {})
+    rootElement.addEventListener('touchstart', e => {
+        startDrag(e.touches[0].pageX, e.touches[0].pageY)
+    })
+    rootElement.addEventListener('touchmove', e => {
+        drag(e.touches[0].pageX, e.touches[0].pageY)
+    })
+    rootElement.addEventListener('touchend', e => {
+        stopDrag()
+    })
 
 
     /*
