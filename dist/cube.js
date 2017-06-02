@@ -16,16 +16,23 @@ var transforms = {
     back: "rotateY(+90deg) translateX(-50%) rotateY(+90deg)",
     bottom: "translateY(+50%) rotateX(+90deg)"
 };(function (rootElement) {
-    // pre-select elements
+
+    /*
+         Setup
+      */
     var faces = ['top', 'left', 'front', 'right', 'back', 'bottom'].reduce(function (acc, f) {
         acc[f] = {
             el: rootElement.querySelector("[data-face=" + f + "]"),
             transform: transforms[f]
         };
         return acc;
-    }, {});
+    }, {}
 
-    var dragAcc = { x: 0, y: 0 };
+    /*
+         Mouse interaction
+      */
+
+    );var dragAcc = { x: 0, y: 0 };
     var dragCurrent = { x: 0, y: 0 };
     var dragStart = void 0;
     var dragMultiplier = 0.1;
@@ -71,8 +78,9 @@ var transforms = {
     }
 
     /*
-        Animate
-     */
+         Animate
+      */
+
     );function getGlobalRotation() {
         var mouseYaw = -(dragAcc.x + dragCurrent.x) * dragMultiplier;
         var mousePitch = (dragAcc.y + dragCurrent.y) * dragMultiplier;

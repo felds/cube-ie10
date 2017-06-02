@@ -16,7 +16,12 @@ const transforms = {
 }
 
 ;(rootElement => {
-    // pre-select elements
+
+    /*
+
+        Setup
+
+     */
     const faces = [ 'top', 'left', 'front', 'right', 'back', 'bottom' ]
         .reduce((acc, f) => {
             acc[f] = {
@@ -26,6 +31,14 @@ const transforms = {
             return acc
         }, {})
 
+
+
+
+    /*
+
+        Mouse interaction
+
+     */
 
     let dragAcc = { x: 0, y: 0 }
     let dragCurrent = { x: 0, y: 0 }
@@ -74,9 +87,14 @@ const transforms = {
     })
 
 
+
+
     /*
+
         Animate
+
      */
+
     function getGlobalRotation() {
         const mouseYaw = -(dragAcc.x + dragCurrent.x) * dragMultiplier
         const mousePitch = (dragAcc.y + dragCurrent.y) * dragMultiplier
