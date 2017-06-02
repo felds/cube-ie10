@@ -1,32 +1,22 @@
-"use strict";
+'use strict';
 
 /**
- * @TODO update size based on viewport dimentions
  * @TODO add device rotation
- * @TODO add mouse rotation
- * @TODO add touch rotation
- * @TODO fix the fucking resolution!
  */
 
-var transforms = {
-    top: "translateY(-50%) rotateX(-90deg)",
-    left: "translateX(-50%) rotateY(+90deg)",
-    front: "rotateY(+90deg) translateX(+50%) rotateY(-90deg)",
-    right: "translateX(+50%) rotateY(-90deg)",
-    back: "rotateY(+90deg) translateX(-50%) rotateY(+90deg)",
-    bottom: "translateY(+50%) rotateX(+90deg)"
-};(function (rootElement) {
+;(function (rootElement) {
+    var computedStyles = window.computedStyles;
 
     /*
          Setup
       */
-    var faces = ['top', 'left', 'front', 'right', 'back', 'bottom'].reduce(function (acc, f) {
-        acc[f] = {
-            el: rootElement.querySelector("[data-face=" + f + "]"),
-            transform: transforms[f]
+
+    // Array.prototype.slice.call(...) = Array.from(...)
+    var faces = Array.prototype.slice.call(rootElement.children).map(function (el) {
+        return {
+            el: el
         };
-        return acc;
-    }, {}
+    }
 
     /*
          Mouse interaction
@@ -68,11 +58,15 @@ var transforms = {
         stopDrag();
     });
     rootElement.addEventListener('touchstart', function (e) {
-        startDrag(e.touches[0].pageX, e.touches[0].pageY);
-    });
+        startDrag(e.touches[0].pageX * 2, e.touches[0].pageY * 2);
+        e.stopPropagation();
+        e.preventDefault();
+    }, true);
     rootElement.addEventListener('touchmove', function (e) {
-        drag(e.touches[0].pageX, e.touches[0].pageY);
-    });
+        drag(e.touches[0].pageX * 2, e.touches[0].pageY * 2);
+        e.stopPropagation();
+        e.preventDefault();
+    }, true);
     rootElement.addEventListener('touchend', function (e) {
         stopDrag();
     }
@@ -91,15 +85,48 @@ var transforms = {
         };
     }
     function animate() {
-        Object.keys(faces).forEach(function (f) {
-            var _faces$f = faces[f],
-                el = _faces$f.el,
-                transform = _faces$f.transform;
+        var size = Math.max(rootElement.parentElement.offsetWidth, rootElement.parentElement.offsetHeight);
+        var perspective = Math.floor(size / 2) - 1 + 'px';
+
+        rootElement.style.width = size + 'px';
+        rootElement.style.height = size + 'px';
+        rootElement.style.perspective = perspective;
+
+        // rootElement.style
+        faces.forEach(function (f) {
+            var el = f.el;
 
             var rotation = getGlobalRotation();
-            var perspective = "600px";
 
-            el.style.transform = "translateZ(" + perspective + ") rotateX(" + rotation.pitch + "deg) rotateY(" + rotation.yaw + "deg) " + transform;
+            var initialTransform = void 0;
+            switch (el.getAttribute('data-face')) {
+                case 'top':
+                    initialTransform = 'translateY(-' + perspective + ') rotateX(-90deg)';break;
+                case 'left':
+                    initialTransform = 'translateX(-' + perspective + ') rotateY(+90deg)';break;
+                case 'front':
+                    initialTransform = 'translateZ(-' + perspective + ')';break;
+                case 'right':
+                    initialTransform = 'translateX(' + perspective + ') rotateY(-90deg)';break;
+                case 'back':
+                    initialTransform = 'translateZ(' + perspective + ') rotateY(+180deg)';break;
+                case 'bottom':
+                    initialTransform = 'translateY(' + perspective + ') rotateX(+90deg)';break;
+                default:
+                    initialTransform = 'translateZ(-' + perspective + ')';
+            }
+
+            var yaw = void 0,
+                pitch = void 0;
+            if (yaw = -parseFloat(el.getAttribute('data-yaw'))) {
+                initialTransform = 'rotateY(' + yaw + 'deg) ' + initialTransform;
+            }
+            if (pitch = -parseFloat(el.getAttribute('data-pitch'))) {
+                initialTransform = 'rotateX(' + pitch + 'deg) ' + initialTransform;
+            }
+
+            el.style.transform = 'translateZ(' + perspective + ') rotateX(' + rotation.pitch + 'deg) rotateY(' + rotation.yaw + 'deg) ' + initialTransform;
+            el.style.backgroundSize = size + 'px ' + size + 'px';
         });
 
         requestAnimationFrame(animate);

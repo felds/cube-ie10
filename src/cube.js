@@ -1,35 +1,20 @@
 /**
- * @TODO update size based on viewport dimentions
  * @TODO add device rotation
- * @TODO add mouse rotation
- * @TODO add touch rotation
- * @TODO fix the fucking resolution!
  */
 
-const transforms = {
-    top:    "translateY(-50%) rotateX(-90deg)",
-    left:   "translateX(-50%) rotateY(+90deg)",
-    front:  "rotateY(+90deg) translateX(+50%) rotateY(-90deg)",
-    right:  "translateX(+50%) rotateY(-90deg)",
-    back:   "rotateY(+90deg) translateX(-50%) rotateY(+90deg)",
-    bottom: "translateY(+50%) rotateX(+90deg)",
-}
-
 ;(rootElement => {
+    const computedStyles = window.computedStyles
 
     /*
 
         Setup
 
      */
-    const faces = [ 'top', 'left', 'front', 'right', 'back', 'bottom' ]
-        .reduce((acc, f) => {
-            acc[f] = {
-                el: rootElement.querySelector(`[data-face=${f}]`),
-                transform: transforms[f],
-            }
-            return acc
-        }, {})
+
+    // Array.prototype.slice.call(...) = Array.from(...)
+    const faces = Array.prototype.slice.call(rootElement.children).map(el => ({
+        el,
+    }))
 
 
 
@@ -77,11 +62,15 @@ const transforms = {
         stopDrag()
     })
     rootElement.addEventListener('touchstart', e => {
-        startDrag(e.touches[0].pageX, e.touches[0].pageY)
-    })
+        startDrag(e.touches[0].pageX * 2, e.touches[0].pageY * 2)
+        e.stopPropagation()
+        e.preventDefault()
+    }, true)
     rootElement.addEventListener('touchmove', e => {
-        drag(e.touches[0].pageX, e.touches[0].pageY)
-    })
+        drag(e.touches[0].pageX * 2, e.touches[0].pageY * 2)
+        e.stopPropagation()
+        e.preventDefault()
+    }, true)
     rootElement.addEventListener('touchend', e => {
         stopDrag()
     })
@@ -96,7 +85,7 @@ const transforms = {
      */
 
     function getGlobalRotation() {
-        const mouseYaw = -(dragAcc.x + dragCurrent.x) * dragMultiplier
+        const mouseYaw   = -(dragAcc.x + dragCurrent.x) * dragMultiplier
         const mousePitch = (dragAcc.y + dragCurrent.y) * dragMultiplier
 
         return {
@@ -105,13 +94,49 @@ const transforms = {
         }
     }
     function animate() {
-        Object.keys(faces).forEach(f => {
-            const { el, transform } = faces[f]
+        const size = Math.max(rootElement.parentElement.offsetWidth, rootElement.parentElement.offsetHeight)
+        const perspective = `${Math.floor(size/2) - 1}px`
+
+        rootElement.style.width         = `${size}px`
+        rootElement.style.height        = `${size}px`
+        rootElement.style.perspective   = perspective
+
+        // rootElement.style
+        faces.forEach(f => {
+            const { el } = f
             const rotation = getGlobalRotation()
-            const perspective = "600px"
+
+            let initialTransform
+            switch (el.getAttribute('data-face')) {
+                case 'top':
+                    initialTransform = `translateY(-${perspective}) rotateX(-90deg)`; break
+                case 'left':
+                    initialTransform = `translateX(-${perspective}) rotateY(+90deg)`; break
+                case 'front':
+                    initialTransform = `translateZ(-${perspective})`; break
+                case 'right':
+                    initialTransform = `translateX(${perspective}) rotateY(-90deg)`; break
+                case 'back':
+                    initialTransform = `translateZ(${perspective}) rotateY(+180deg)`; break
+                case 'bottom':
+                    initialTransform = `translateY(${perspective}) rotateX(+90deg)`; break
+                default:
+                    initialTransform = `translateZ(-${perspective})`
+            }
+
+
+            let yaw, pitch
+            if (yaw = -parseFloat(el.getAttribute('data-yaw'))) {
+                initialTransform = `rotateY(${yaw}deg) ${initialTransform}`
+            }
+            if (pitch = -parseFloat(el.getAttribute('data-pitch'))) {
+                initialTransform = `rotateX(${pitch}deg) ${initialTransform}`
+            }
+
 
             el.style.transform =
-                `translateZ(${perspective}) rotateX(${rotation.pitch}deg) rotateY(${rotation.yaw}deg) ${transform}`
+                `translateZ(${perspective}) rotateX(${rotation.pitch}deg) rotateY(${rotation.yaw}deg) ${initialTransform}`
+            el.style.backgroundSize = `${size}px ${size}px`
         });
 
         requestAnimationFrame(animate)

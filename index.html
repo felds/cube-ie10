@@ -14,28 +14,40 @@
     }
     .viewport {
         overflow: hidden;
-        width: 800px;
-        height: 800px;
+        width: 100vw;
+        height: 100vh;
         margin: 0 auto;
+        display: flex;
     }
 
     [data-cube] {
-        width: 800px;
-        height: 800px;
+        /*margin-top: calc(100vh - 100%);*/
         position: relative;
         background: black;
-        perspective: 600px;
-        transform: translateZ(000px);
     }
     [data-face] {
         position: absolute;
         left: 0; top: 0;
         width: 100%;
         height: 100%;
-        background-size: 800px 800px !important;
+        background-size:contain;
         background-position: center center;
-        /*transition: transform 50ms ease-out;*/
     }
+
+
+    [data-feature] {
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 2rem;
+        height: 2rem;
+        margin-left: -1rem;
+        margin-top: -1rem;
+        border-radius: 50%;
+        border: 3px solid rgba(200, 0, 100, 1);;
+        background: rgba(200, 0, 100, .3);
+        cursor: pointer;
+    }
+
     </style>
 </head>
 <body>
@@ -49,8 +61,11 @@
             <div data-face="back" style="background-image: url(images/00_CUBEFACE_ECOSPORT_TRAS.jpg);"></div>
             <div data-face="bottom" style="background-image: url(images/00_CUBEFACE_ECOSPORT_BAIXO.jpg);"></div>
 
-            <div data-feature="Direção elétrica" data-rot-y="-0" data-rot-x="0"></div>
-            <div data-feature="Sync" data-rot-y="0" data-rot-x="2"></div>
+            <a data-feature title="SYNC® 3 com tela de 8”" data-yaw="7" data-pitch="-5"></a>
+            <a data-feature title="Painel com Soft Touch" data-yaw="22" data-pitch="-8"></a>
+            <a data-feature title="Transmissão automática" data-yaw="1" data-pitch="-29"></a>
+            <a data-feature title="Teto solar" data-yaw="0" data-pitch="60"></a>
+            <a data-feature title="Cargo Management System" data-yaw="190" data-pitch="-5"></a>
         </div>
 
     </div>
