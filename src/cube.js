@@ -27,20 +27,42 @@ const transforms = {
         }, {})
 
 
+    let dragAcc = { x: 0, y: 0 }
+    let dragCurrent = { x: 0, y: 0 }
     let dragStart
+    const dragMultiplier = 0.1
     function startDrag(x, y) {
         dragStart = { x, y }
     }
     function drag(x, y) {
+        if (!dragStart) return
+
+        dragCurrent = {
+            x: x - dragStart.x,
+            y: y - dragStart.y,
+        }
     }
     function stopDrag() {
+        if (!dragStart) return
 
+        dragAcc = {
+            x: dragAcc.x + dragCurrent.x,
+            y: dragAcc.y + dragCurrent.y,
+        }
+        dragCurrent =  { x: 0, y: 0 }
+        dragStart = undefined
     }
 
 
-    rootElement.addEventListener('mousedown', e => {})
-    window.addEventListener('mousemove', e => {})
-    window.addEventListener('mouseup', e => {})
+    rootElement.addEventListener('mousedown', e => {
+        startDrag(e.pageX, e.pageY)
+    })
+    window.addEventListener('mousemove', e => {
+        drag(e.pageX, e.pageY)
+    })
+    window.addEventListener('mouseup', e => {
+        stopDrag()
+    })
     // rootElement.addEventListener('mousedown', e => {})
     // rootElement.addEventListener('mousedown', e => {})
     // rootElement.addEventListener('mousedown', e => {})
@@ -49,13 +71,23 @@ const transforms = {
     /*
         Animate
      */
+    function getGlobalRotation() {
+        const mouseYaw = -(dragAcc.x + dragCurrent.x) * dragMultiplier
+        const mousePitch = (dragAcc.y + dragCurrent.y) * dragMultiplier
+
+        return {
+            yaw: (mouseYaw) % 360,
+            pitch: Math.min(70, Math.max(-70, mousePitch)),
+        }
+    }
     function animate() {
         Object.keys(faces).forEach(f => {
             const { el, transform } = faces[f]
+            const rotation = getGlobalRotation()
+            const perspective = "600px"
 
-            const rotationY = 0
-
-            el.style.transform = `translateZ(600px) rotateY(${rotationY}deg) ${transform}`
+            el.style.transform =
+                `translateZ(${perspective}) rotateX(${rotation.pitch}deg) rotateY(${rotation.yaw}deg) ${transform}`
         });
 
         requestAnimationFrame(animate)
