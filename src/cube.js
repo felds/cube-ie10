@@ -1,4 +1,11 @@
-const rotateYRegex = /rotateY\((-?[0-9.]+)deg\)/gm
+/**
+ * @TODO update size based on viewport dimentions
+ * @TODO add device rotation
+ * @TODO add mouse rotation
+ * @TODO add touch rotation
+ * @TODO fix the fucking resolution!
+ */
+
 const transforms = {
     top:    "translateY(-50%) rotateX(-90deg)",
     left:   "translateX(-50%) rotateY(+90deg)",
@@ -9,35 +16,46 @@ const transforms = {
 }
 
 ;(rootElement => {
-
-    const m = 0.05
-
-    // const faces = ['top', 'left', 'front', 'right', 'back', 'bottom']
-    const faces = ['left', 'front', 'right', 'back']
+    // pre-select elements
+    const faces = [ 'top', 'left', 'front', 'right', 'back', 'bottom' ]
         .reduce((acc, f) => {
             acc[f] = {
                 el: rootElement.querySelector(`[data-face=${f}]`),
                 transform: transforms[f],
             }
-
             return acc
         }, {})
 
-    // console.log(faces)
 
-    const startTime = Date.now()
+    let dragStart
+    function startDrag(x, y) {
+        dragStart = { x, y }
+    }
+    function drag(x, y) {
+    }
+    function stopDrag() {
+
+    }
 
 
+    rootElement.addEventListener('mousedown', e => {})
+    window.addEventListener('mousemove', e => {})
+    window.addEventListener('mouseup', e => {})
+    // rootElement.addEventListener('mousedown', e => {})
+    // rootElement.addEventListener('mousedown', e => {})
+    // rootElement.addEventListener('mousedown', e => {})
+
+
+    /*
+        Animate
+     */
     function animate() {
-        const rotationY = ((Date.now() - startTime) * m) % 360
-        // const rotationY = -30
-
         Object.keys(faces).forEach(f => {
             const { el, transform } = faces[f]
 
+            const rotationY = 0
+
             el.style.transform = `translateZ(600px) rotateY(${rotationY}deg) ${transform}`
-            el.style.display = isFacingBack(el) ? 'block' : 'none'
-            // console.log("\n\n\n\n")
         });
 
         requestAnimationFrame(animate)
@@ -45,26 +63,3 @@ const transforms = {
     animate()
 
 })(document.querySelector('#cube'))
-
-
-
-
-function isFacingBack(el) {
-    const rY = sumRotateY(el.style.transform)
-    return rY < 110 || rY > 250
-}
-
-
-
-
-
-
-function sumRotateY(str, offset = 0) {
-    rotateYRegex.lastIndex = offset
-
-    const match = rotateYRegex.exec(str)
-
-    return match !== null
-        ? (parseFloat(match[1]) + sumRotateY(str, match.index + 1)) % 360
-        : 0
-}
