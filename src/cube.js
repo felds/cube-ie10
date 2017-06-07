@@ -94,8 +94,9 @@
         }
     }
     function animate() {
-        const size = Math.max(rootElement.parentElement.offsetWidth, rootElement.parentElement.offsetHeight)
-        const perspective = `${Math.floor(size/2) - 1}px`
+        const size          = Math.max(rootElement.parentElement.offsetWidth, rootElement.parentElement.offsetHeight)
+        const fov           = (parseInt(rootElement.getAttribute('fov')) || 50) / 100
+        const perspective   = `${Math.floor(size * fov)}px`
 
         rootElement.style.width         = `${size}px`
         rootElement.style.height        = `${size}px`
@@ -109,19 +110,19 @@
             let initialTransform
             switch (el.getAttribute('data-face')) {
                 case 'top':
-                    initialTransform = `translateY(-${perspective}) rotateX(-90deg)`; break
+                    initialTransform = `translateY(-${size / 2 - 1}px) rotateX(-90deg)`; break
                 case 'left':
-                    initialTransform = `translateX(-${perspective}) rotateY(+90deg)`; break
+                    initialTransform = `translateX(-${size / 2 - 1}px) rotateY(+90deg)`; break
                 case 'front':
-                    initialTransform = `translateZ(-${perspective})`; break
+                    initialTransform = `translateZ(-${size / 2 - 1}px)`; break
                 case 'right':
-                    initialTransform = `translateX(${perspective}) rotateY(-90deg)`; break
+                    initialTransform = `translateX(${size / 2 - 1}px) rotateY(-90deg)`; break
                 case 'back':
-                    initialTransform = `translateZ(${perspective}) rotateY(+180deg)`; break
+                    initialTransform = `translateZ(${size / 2 - 1}px) rotateY(+180deg)`; break
                 case 'bottom':
-                    initialTransform = `translateY(${perspective}) rotateX(+90deg)`; break
+                    initialTransform = `translateY(${size / 2 - 1}px) rotateX(+90deg)`; break
                 default:
-                    initialTransform = `translateZ(-${perspective})`
+                    initialTransform = `translateZ(-${size / 2 - 1}px)`
             }
 
 
