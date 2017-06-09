@@ -22,7 +22,7 @@
          Mouse interaction
       */
 
-    );var dragAcc = { x: 0, y: 0 };
+    );var dragAcc = { x: 0, y: -250 };
     var dragCurrent = { x: 0, y: 0 };
     var dragStart = void 0;
     var dragMultiplier = 0.1;
