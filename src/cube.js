@@ -95,6 +95,7 @@
     }
     function animate() {
         const size = Math.max(rootElement.parentElement.offsetWidth, rootElement.parentElement.offsetHeight)
+        const fov = (parseInt(rootElement.getAttribute('data-fov')) || 50) / 100;
         const perspective = `${Math.floor(size/2) - 1}px`
 
         rootElement.style.width         = `${size}px`

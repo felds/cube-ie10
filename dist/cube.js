@@ -86,6 +86,7 @@
     }
     function animate() {
         var size = Math.max(rootElement.parentElement.offsetWidth, rootElement.parentElement.offsetHeight);
+        var fov = (parseInt(rootElement.getAttribute('data-fov')) || 50) / 100;
         var perspective = Math.floor(size / 2) - 1 + 'px';
 
         rootElement.style.width = size + 'px';
