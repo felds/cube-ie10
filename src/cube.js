@@ -25,7 +25,7 @@
 
      */
 
-    let dragAcc = { x: 0, y: 0 }
+    let dragAcc = { x: 0, y: -250 }
     let dragCurrent = { x: 0, y: 0 }
     let dragStart
     const dragMultiplier = 0.1
